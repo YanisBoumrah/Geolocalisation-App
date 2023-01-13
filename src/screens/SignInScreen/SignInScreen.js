@@ -7,7 +7,7 @@ import {
   useWindowDimensions,
   ScrollView,
 } from 'react-native';
-import Logo from '../../../assets/images/Logo_1.png';
+import Logo from '../../../assets/images/logo.png';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons';
@@ -41,7 +41,7 @@ const SignInScreen = () => {
           style={[styles.logo, {height: height * 0.3}]}
           resizeMode="contain"
         />
-
+        <Text>GEOTRACK</Text>
         <CustomInput
           placeholder="Username"
           value={username}
