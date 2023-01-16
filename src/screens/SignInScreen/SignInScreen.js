@@ -41,7 +41,7 @@ const SignInScreen = () => {
           style={[styles.logo, {height: height * 0.3}]}
           resizeMode="contain"
         />
-        <Text>GEOTRACK</Text>
+        <Text style={styles.title}>GEOTRACK</Text>
         <CustomInput
           placeholder="Username"
           value={username}
@@ -84,6 +84,11 @@ const styles = StyleSheet.create({
     maxWidth: 300,
     maxHeight: 200,
   },
+  title: {
+    fontFamily: 'Roboto-Black',
+    fontWeight: 'bold',
+    fontSize:30,
+  }
 });
 
 export default SignInScreen;
