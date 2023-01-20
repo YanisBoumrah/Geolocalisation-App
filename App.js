@@ -1,11 +1,8 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import Navigation from './src/navigation';
-// import Geolocation from '@react-native-community/geolocation';
-
 
 const App = () => {
-  // Geolocation.getCurrentPosition(info => console.log(info));
   return (
     <SafeAreaView style={styles.root}>
       <Navigation />

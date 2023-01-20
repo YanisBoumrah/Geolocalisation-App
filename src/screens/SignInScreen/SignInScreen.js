@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -12,18 +12,31 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/native';
+import {auth} from '../../../firebase';
 
 const SignInScreen = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const {height} = useWindowDimensions();
   const navigation = useNavigation();
 
-  const onSignInPressed = () => {
-    // validate user
-    navigation.navigate('Home');
-  };
+  useEffect(() => {
+    auth.onAuthStateChanged(user => {
+      if(user){
+          navigation.replace("Home");
+      }
+  })
+  },[])
+
+  const handleLogin = () =>{
+    auth.signInWithEmailAndPassword(email, password)
+        .then(userCredntials =>{
+            const user = userCredntials.user;
+            console.log(`Logged in with ${user.email}`);
+        })
+        .catch(err => alert(err.message));
+  }
 
   const onForgotPasswordPressed = () => {
     navigation.navigate('ForgotPassword');
@@ -41,11 +54,11 @@ const SignInScreen = () => {
           style={[styles.logo, {height: height * 0.3}]}
           resizeMode="contain"
         />
-
+        <Text style={styles.title}>GEOTRACK</Text>
         <CustomInput
-          placeholder="Username"
-          value={username}
-          setValue={setUsername}
+          placeholder="email"
+          value={email}
+          setValue={setEmail}
         />
         <CustomInput
           placeholder="Password"
@@ -54,7 +67,7 @@ const SignInScreen = () => {
           secureTextEntry
         />
 
-        <CustomButton text="Sign In" onPress={onSignInPressed} />
+        <CustomButton text="Login" onPress={handleLogin} />
 
         <CustomButton
           text="Forgot password?"
@@ -84,6 +97,10 @@ const styles = StyleSheet.create({
     maxWidth: 300,
     maxHeight: 200,
   },
+  title: {
+    fontWeight: 'bold',
+    fontSize:30,
+  }
 });
 
 export default SignInScreen;
