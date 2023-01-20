@@ -56,7 +56,7 @@ const SignInScreen = () => {
         />
         <Text style={styles.title}>GEOTRACK</Text>
         <CustomInput
-          placeholder="Username"
+          placeholder="email"
           value={email}
           setValue={setEmail}
         />
