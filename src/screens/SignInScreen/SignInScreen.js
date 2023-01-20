@@ -7,25 +7,20 @@ import {
   useWindowDimensions,
   ScrollView,
 } from 'react-native';
-import Logo from '../../../assets/images/logo.png';
+import Logo from '../../../assets/images/Logo_1.png';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/native';
-import {useForm, Controller} from 'react-hook-form';
 
 const SignInScreen = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
   const {height} = useWindowDimensions();
   const navigation = useNavigation();
 
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-  } = useForm();
-
-  const onSignInPressed = data => {
-    console.log(data);
+  const onSignInPressed = () => {
     // validate user
     navigation.navigate('Home');
   };
@@ -38,7 +33,6 @@ const SignInScreen = () => {
     navigation.navigate('SignUp');
   };
 
-
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.root}>
@@ -47,26 +41,17 @@ const SignInScreen = () => {
           style={[styles.logo, {height: height * 0.3}]}
           resizeMode="contain"
         />
-        <Text>GEOTRACK</Text>
+
         <CustomInput
-          name="username"
           placeholder="Username"
-          control={control}
-          rules={{required: 'Username is required'}}
+          value={username}
+          setValue={setUsername}
         />
-        
         <CustomInput
-          name="password"
           placeholder="Password"
+          value={password}
+          setValue={setPassword}
           secureTextEntry
-          control={control}
-          rules={{
-            required: 'Password is required',
-            minLength: {
-              value: 3,
-              message: 'Password should be minimum 3 characters long',
-            },
-          }}
         />
 
         <CustomButton text="Sign In" onPress={onSignInPressed} />
