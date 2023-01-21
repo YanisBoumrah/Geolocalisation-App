@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native'
+import MapComp from '../../components/MapComponent/MapComp';
 
 
 const MapScreen = () => {
@@ -8,7 +9,7 @@ const MapScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={{fontSize: 24, alignSelf: 'center'}}>Maps</Text>
+        <MapComp/>
     </View>
   );
 };
