@@ -77,7 +77,7 @@ const BottomNav = () => {
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top: 0}}>
                         <Image
-                            source={require('../../../assets/icons/add.png')}
+                            source={require('../../../assets/icons/addFreinds.png')}
                             resizeMode="contain"
                             style={{
                                 width: 25,
