@@ -40,7 +40,8 @@ const SignUpScreen = () => {
           firstName: firstName,
           lastName: lastName,
           username: username,
-          email: email
+          email: email,
+          friends: []
         }
         pushData(body);
       })
@@ -96,7 +97,7 @@ const SignUpScreen = () => {
           value={firstName}
           setValue={setFirstName}
         />
-        <CustomInput placeholder="Email" value={email} setValue={setEmail} />
+        
         <CustomInput
           placeholder="Lastname"
           value={lastName}
