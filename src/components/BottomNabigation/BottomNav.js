@@ -82,7 +82,7 @@ const BottomNav = () => {
                 title: null,
                 header:VoidComp
             }} />
-            <Tab.Screen name="AddFriends" component={AddFriends}
+            <Tab.Screen name= 'Add friends' component={AddFriends}
             options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top: 0}}>
@@ -97,8 +97,8 @@ const BottomNav = () => {
                         />
                     </View>
                 ),
-                title: null,
-                header:VoidComp
+               
+                
         
             }} />
         </Tab.Navigator>
