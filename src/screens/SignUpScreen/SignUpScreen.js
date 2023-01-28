@@ -44,7 +44,8 @@ const SignUpScreen = () => {
           firstName: firstName,
           lastName: lastName,
           username: username,
-          email: email
+          email: email,
+          freinds: []
         };
         const bodyLocation = {
           id: user.uid,
