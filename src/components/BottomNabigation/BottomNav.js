@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Text, View,Image } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import MapScreen from '../../screens/MapScreen/MapScreen';
 import Chat from '../../screens/ChatScreen/ChatScreen';
 import AddFriends from '../../screens/AddFriends/AddFriends';
 import HomeScreen from '../../screens/HomeScreen';
+import LogOut from '../LogOutButton/LogOut';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,9 +17,9 @@ const BottomNav = () => {
             tabBarShowLabel: false,
             tabBarStyle: {
                 position: 'absolute',
-                elevation: 0,
-                backgroundColor: '#fff',
+                backgroundColor: '#000',
                 height: 50,
+                borderTopWidth: 0,
             }
           }}
         >
@@ -33,13 +33,18 @@ const BottomNav = () => {
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? 'green' : '#000',
+                                tintColor: focused ? 'green' : '#fff',
 
                             }}
                         />
                     </View>
-                )
-            }} />
+                ),
+                title: null,
+                header:LogOut
+                            }}
+
+            
+             />
             <Tab.Screen name="Map" component={MapScreen}
             options={{
                 tabBarIcon: ({focused}) => (
@@ -50,11 +55,12 @@ const BottomNav = () => {
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? 'green' : '#000'
+                                tintColor: focused ? 'green' : '#fff'
                             }}
                         />
                     </View>
-                )
+                ),
+                title: null,
             }} />
             <Tab.Screen name="Chat" component={Chat}
             options={{
@@ -66,27 +72,30 @@ const BottomNav = () => {
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? 'green' : '#000'
+                                tintColor: focused ? 'green' : '#fff'
                             }}
                         />
                     </View>
-                )
+                ),
+                title: null
+                
             }} />
             <Tab.Screen name="AddFriends" component={AddFriends}
             options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top: 0}}>
                         <Image
-                            source={require('../../../assets/icons/add.png')}
+                            source={require('../../../assets/icons/addFreinds.png')}
                             resizeMode="contain"
                             style={{
                                 width: 25,
                                 height: 25,
-                                tintColor: focused ? 'green' : '#000'
+                                tintColor: focused ? 'green' : '#fff'
                             }}
                         />
                     </View>
-                )
+                ),
+                title: null
             }} />
         </Tab.Navigator>
         );
