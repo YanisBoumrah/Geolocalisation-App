@@ -7,6 +7,7 @@ import Chat from '../../screens/ChatScreen/ChatScreen';
 import AddFriends from '../../screens/AddFriends/AddFriends';
 import HomeScreen from '../../screens/HomeScreen';
 import LogOut from '../LogOutButton/LogOut';
+import VoidComp from '../voidComponent/VoidComp';
 
 const Tab = createBottomTabNavigator();
 
@@ -23,7 +24,7 @@ const BottomNav = () => {
             }
           }}
         >
-            <Tab.Screen name="Home" component={HomeScreen} 
+            <Tab.Screen name="ConnectedPage" component={HomeScreen} 
             options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top: 0}}>
@@ -61,6 +62,7 @@ const BottomNav = () => {
                     </View>
                 ),
                 title: null,
+                header:VoidComp
             }} />
             <Tab.Screen name="Chat" component={Chat}
             options={{
@@ -77,10 +79,10 @@ const BottomNav = () => {
                         />
                     </View>
                 ),
-                title: null
-                
+                title: null,
+                header:VoidComp
             }} />
-            <Tab.Screen name="AddFriends" component={AddFriends}
+            <Tab.Screen name= 'Add friends' component={AddFriends}
             options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top: 0}}>
@@ -95,7 +97,9 @@ const BottomNav = () => {
                         />
                     </View>
                 ),
-                title: null
+               
+                
+        
             }} />
         </Tab.Navigator>
         );
