@@ -7,6 +7,7 @@ import {useNavigation} from '@react-navigation/core';
 import { auth } from '../../../firebase';
 import { Users } from '../../../firebase';
 import axios from 'axios';
+import * as Location from 'expo-location';
 
 const SignUpScreen = () => {
   const [firstName, setFirstName] = useState('');
@@ -15,6 +16,7 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordRepeat, setPasswordRepeat] = useState('');
+  const [location, setLocation] = useState(null);
   
 
   const navigation = useNavigation();
@@ -24,10 +26,12 @@ const SignUpScreen = () => {
         if(user){
           navigation.replace("Home");
         }
-      })
+      });
+      // getLocation();
+      // console.log(location);
   },[])
 
-  const onRegisterPressed = () => {
+  const onRegisterPressed = async () => {
     let check1 = verifyFields();
     let check2 = checkPassword();
     if(check1 == true && check2 == true){
@@ -35,14 +39,20 @@ const SignUpScreen = () => {
       .createUserWithEmailAndPassword(email,password)
       .then(userCredentials => {
         const user = userCredentials.user;
-        const body = {
-          id: user.id,
+        const bodyUser = {
+          id: user.uid,
           firstName: firstName,
           lastName: lastName,
           username: username,
           email: email
-        }
-        pushData(body);
+        };
+        const bodyLocation = {
+          id: user.uid,
+          lat: null,
+          long: null
+        };
+        pushData(bodyUser);
+        pushLocation(bodyLocation);
       })
     }else{
       Alert.alert("Error SignUp", "verify your fields");
@@ -55,6 +65,13 @@ const SignUpScreen = () => {
          .then(res =>{
           console.log("posted !");
          });
+  }
+
+  const pushLocation = (body) => {
+    axios.post("https://geoapi.azurewebsites.net/location", body)
+          .then(res =>{
+            console.log("location registered!");
+          });
   }
 
   const verifyFields = () =>{
@@ -86,6 +103,22 @@ const SignUpScreen = () => {
     console.warn('onPrivacyPressed');
   };
 
+  const getLocation = async () =>{
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied');
+        return;
+      }
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High,
+      });
+      setLocation(location);
+    } catch (error) {
+      console.log(error);
+  }
+}
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.root}>
@@ -96,7 +129,6 @@ const SignUpScreen = () => {
           value={firstName}
           setValue={setFirstName}
         />
-        <CustomInput placeholder="Email" value={email} setValue={setEmail} />
         <CustomInput
           placeholder="Lastname"
           value={lastName}

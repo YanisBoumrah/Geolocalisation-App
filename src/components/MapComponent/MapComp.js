@@ -10,29 +10,30 @@ const MapComp = () => {
     const [watchId, setWatchId] = useState(null);
 
 useEffect(() => {
-  (async () => {
-    try {
-      const { status } = await Location.requestPermissionsAsync();
-      if (status !== 'granted') {
-        setError('Permission to access location was denied');
-        return;
-      }
-
-      const newWatchId = await Location.watchPositionAsync({
-        accuracy: Location.Accuracy.High,
-        timeInterval: 2000,
-        distanceInterval: 10
-      }, (location) => {
-        setLocation(location);
-      });
-      setWatchId(newWatchId);
-    } catch (error) {
-      setError(error);
-    }
-  })();
-
- 
+  getLocation();
+  console.log(location);
 }, []);
+
+ const getLocation = async () =>{
+  try {
+    const { status } = await Location.requestPermissionsAsync();
+    if (status !== 'granted') {
+      setError('Permission to access location was denied');
+      return;
+    }
+
+    const newWatchId = await Location.watchPositionAsync({
+      accuracy: Location.Accuracy.High,
+      timeInterval: 2000,
+      distanceInterval: 10
+    }, (location) => {
+      setLocation(location);
+    });
+    setWatchId(newWatchId);
+  } catch (error) {
+    setError(error);
+  }
+ }
     
   let initialRegion = {
     latitude: 0,
