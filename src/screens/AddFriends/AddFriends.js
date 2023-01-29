@@ -12,6 +12,7 @@ const AddFriends = () => {
   const [field, setField] = useState('Freinds');
   const [data, setData] = useState([]);
   const [userId, setUserId] = useState("");
+  const [freids, setFreinds] = useState([]);
 
   useEffect(() =>{
       auth.onAuthStateChanged(user =>{

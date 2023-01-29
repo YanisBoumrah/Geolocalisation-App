@@ -16,7 +16,7 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordRepeat, setPasswordRepeat] = useState('');
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState({});
   
 
   const navigation = useNavigation();
@@ -27,9 +27,11 @@ const SignUpScreen = () => {
           navigation.replace("Home");
         }
       });
-      // getLocation();
-      // console.log(location);
+       getLocation();
+       
   },[])
+
+  //console.log("location is ", location);
 
   const onRegisterPressed = async () => {
     let check1 = verifyFields();
@@ -44,34 +46,33 @@ const SignUpScreen = () => {
           firstName: firstName,
           lastName: lastName,
           username: username,
-          email: email
+          email: email,
+          freinds: []
         };
         const bodyLocation = {
           id: user.uid,
-          lat: null,
-          long: null
+          lat: location?.coords.latitude,
+          long: location?.coords.longitude
         };
         pushData(bodyUser);
         pushLocation(bodyLocation);
+        console.log("body location", bodyLocation)
       })
     }else{
       Alert.alert("Error SignUp", "verify your fields");
-    }
-    
+    } 
   };
 
-  const pushData = (body) => {
-    axios.post("https://geoapi.azurewebsites.net/user", body)
-         .then(res =>{
-          console.log("posted !");
-         });
+  
+
+  const pushData = async (body) => {
+    const response = await axios.post("https://geoapi.azurewebsites.net/user", body);
+    console.log(response);        
   }
 
-  const pushLocation = (body) => {
-    axios.post("https://geoapi.azurewebsites.net/location", body)
-          .then(res =>{
-            console.log("location registered!");
-          });
+  const pushLocation = async (body) => {
+    const response = await axios.post("https://geoapi.azurewebsites.net/location", body);
+    console.log(response);
   }
 
   const verifyFields = () =>{
