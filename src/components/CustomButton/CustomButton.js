@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Image,Text, StyleSheet, Pressable} from 'react-native';
 
-const CustomButton = ({onPress, text, type = 'PRIMARY', bgColor, fgColor}) => {
+const CustomButton = ({onPress,image, text, type = 'PRIMARY', bgColor, fgColor}) => {
   return (
     <Pressable
       onPress={onPress}
@@ -10,6 +10,8 @@ const CustomButton = ({onPress, text, type = 'PRIMARY', bgColor, fgColor}) => {
         styles[`container_${type}`],
         bgColor ? {backgroundColor: bgColor} : {},
       ]}>
+      <View style ={styles.div}>
+      {image && <Image source={image} style={styles.image} />}
       <Text
         style={[
           styles.text,
@@ -18,6 +20,7 @@ const CustomButton = ({onPress, text, type = 'PRIMARY', bgColor, fgColor}) => {
         ]}>
         {text}
       </Text>
+      </View>
     </Pressable>
   );
 };
@@ -32,6 +35,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
   },
+  div: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+  },
+  image: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+    resizeMode: 'contain',
+  },
+
 
   container_PRIMARY: {
     backgroundColor: '#3B71F3',

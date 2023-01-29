@@ -48,9 +48,9 @@ const AddFriends = () => {
    setField(field);
   };
 
-  const renderItem = ({item, index}) =>{
+  const renderItem = ({item}) =>{
     return(
-      <View key={index} style={styles.itemContainer}>
+      <View key={item.id} style={styles.itemContainer}>
         <View style={styles.itemLogo}>
           <Image
             style={styles.itemImage}
@@ -88,12 +88,12 @@ const AddFriends = () => {
         ))
        }
       </View>
-      {/* <FlatList
+      <FlatList
         data={data?data:""}
         keyExtractor={(e,i) => i.toString()}
         renderItem={renderItem}
-      /> */}
-      <View style={styles.bodyContainer}>
+      />
+      {/* <View style={styles.bodyContainer}>
         {
           data == undefined
           ? <Text>No Data found</Text>
@@ -119,7 +119,7 @@ const AddFriends = () => {
         ))
           )  
         }
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };
