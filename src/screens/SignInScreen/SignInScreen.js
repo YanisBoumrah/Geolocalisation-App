@@ -13,7 +13,7 @@ import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/native';
 import {auth} from '../../../firebase';
-import * as Facebook from 'expo-facebook';
+// import * as Facebook from 'expo-facebook';
 import * as Location from 'expo-location';
 
 const SignInScreen = () => {
@@ -36,52 +36,52 @@ const SignInScreen = () => {
 
   },[])
 
-  const handleFacebookLogin = async () => {
+  // const handleFacebookLogin = async () => {
 
-    try {
-      await Facebook.initializeAsync({  
-        appId: '1649158192208792',
-      });
-      const { type, token } = await Facebook.logInWithReadPermissionsAsync(
-        { permissions: ['public_profile', 'email'] }
-      );
-      if (type === 'success') {
-        // Get the user's name and email using Facebook's Graph API
-        const response = await axios.get(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email`);
-        const user = response.data;
-        console.log(`Logged in with ${user.name}`);
+  //   try {
+  //     await Facebook.initializeAsync({  
+  //       appId: '1649158192208792',
+  //     });
+  //     const { type, token } = await Facebook.logInWithReadPermissionsAsync(
+  //       { permissions: ['public_profile', 'email'] }
+  //     );
+  //     if (type === 'success') {
+  //       // Get the user's name and email using Facebook's Graph API
+  //       const response = await axios.get(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email`);
+  //       const user = response.data;
+  //       console.log(`Logged in with ${user.name}`);
         
-        // Create a credential with the token
-        const credential = firebase.auth.FacebookAuthProvider.credential(token);
+  //       // Create a credential with the token
+  //       const credential = firebase.auth.FacebookAuthProvider.credential(token);
         
-        // Sign in with the credential
-        auth.signInWithCredential(credential)
-            .then(userCredentials => {
-              const user = userCredentials.user;
-              console.log(`Logged in with ${user.email}`);
+  //       // Sign in with the credential
+  //       auth.signInWithCredential(credential)
+  //           .then(userCredentials => {
+  //             const user = userCredentials.user;
+  //             console.log(`Logged in with ${user.email}`);
 
-              const bodyUser = {
-                id: user.uid,
-                email: user.email,
-                name: user.name,
-                freinds: []
-              }
-              const bodyLocation = {
-                id: user.uid,
-                lat: location?.coords.latitude,
-                long: location?.coords.longitude
-              };
-              pushData(bodyUser);
-              pushLocation(bodyLocation);
-            })
-            .catch(err => alert(err.message));
-      } else {
-        console.log('Cancelled login');
-      }
-    } catch (err) {
-      console.log('Error logging in', err);
-    }
-  };
+  //             const bodyUser = {
+  //               id: user.uid,
+  //               email: user.email,
+  //               name: user.name,
+  //               freinds: []
+  //             }
+  //             const bodyLocation = {
+  //               id: user.uid,
+  //               lat: location?.coords.latitude,
+  //               long: location?.coords.longitude
+  //             };
+  //             pushData(bodyUser);
+  //             pushLocation(bodyLocation);
+  //           })
+  //           .catch(err => alert(err.message));
+  //     } else {
+  //       console.log('Cancelled login');
+  //     }
+  //   } catch (err) {
+  //     console.log('Error logging in', err);
+  //   }
+  // };
 
   const pushData = async (body) => {
     const response = await axios.post("https://geoapi.azurewebsites.net/user", body);
