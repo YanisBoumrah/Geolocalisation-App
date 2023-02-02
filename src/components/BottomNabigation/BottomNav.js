@@ -8,8 +8,11 @@ import AddFriends from '../../screens/AddFriends/AddFriends';
 import HomeScreen from '../../screens/HomeScreen';
 import LogOut from '../LogOutButton/LogOut';
 import VoidComp from '../voidComponent/VoidComp';
+import ChatBetweenUsers from '../../screens/ChatBetweenUsers/ChatBetweenUsers';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 const BottomNav = () => {
     return (
@@ -79,9 +82,8 @@ const BottomNav = () => {
                         />
                     </View>
                 ),
-                title: null,
-                header:VoidComp
-            }} />
+            }} >
+            </Tab.Screen>
             <Tab.Screen name= 'Add friends' component={AddFriends}
             options={{
                 tabBarIcon: ({focused}) => (
