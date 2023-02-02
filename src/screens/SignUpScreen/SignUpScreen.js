@@ -48,10 +48,11 @@ const SignUpScreen = () => {
           username: username,
           email: email,
           freinds: [],
-          latitude: null,
-          longitude: null
+          latitude: location?.coords.latitude,
+          longitude: location?.coords.longitude
         };
         pushData(bodyUser);
+        console.log("user created",bodyUser);
       })
     }else{
       Alert.alert("Error SignUp", "verify your fields");
