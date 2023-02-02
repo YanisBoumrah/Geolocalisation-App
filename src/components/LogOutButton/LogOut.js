@@ -31,8 +31,9 @@ const styles = StyleSheet.create({
     container:{
         position: 'absolute',
         right: 15,
-        top: 25,
+        top: 50,
         alignItems: 'center',
         justifyContent: 'center',
+        height:50
       },
 })
