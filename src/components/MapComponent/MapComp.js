@@ -4,57 +4,53 @@ import MapViewDirections from "react-native-maps-directions";
 import * as Location from "expo-location";
 import React, { useState, useEffect } from "react";
 import { GOOGLE_API_KEY } from "../../../env";
+import { auth } from "../../../firebase";
+import axios from "axios";
 
 const MapComp = () => {
   const [location, setLocation] = useState(null);
   const [error, setError] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [friends, setFriends] = useState([]);
+  const [prevLocation, setPrevLocation] = useState(null);
+
   const [origin, setOrigin] = useState({
     latitude: 0,
     longitude: 0,
   });
+
+
   const [destination, setDestination] = useState(null);
-  const [friendsCoordinates, setFriendsCoordinates] = useState(null);
   const [watchId, setWatchId] = useState(null);
   const [routeVisible, setRouteVisible] = useState(false);
+  
 
-  const dest = [
-    {
-      latitude: 49,
-      longitude: 2.3037095439072464,
-    },
-    {
-      latitude: 48.98,
-      longitude: 2.3037095439072464,
-    },
-    {
-      latitude: 48.97,
-      longitude: 2.3037095439072464,
-    },
-    {
-      latitude: 48.93,
-      longitude: 2.3037095439072464,
-    },
-    {
-      latitude: 48.91,
-      longitude: 2.3037095439072464,
-    },
-    {
-      latitude: 48.92,
-      longitude: 2.3037095439072464,
-    },{
-      latitude: 48.89,
-      longitude: 2.6,
-    },{
-      latitude: 48.93,
-      longitude: 2.4,
-    },{
-      latitude: 48.94,
-      longitude: 2.5,
-    },
-  ];
+ 
+  const getFriends = async (userId) => {
+    const response = await axios.get(
+      `https://geoapi.azurewebsites.net/user/friends?id=${userId}`
+    );
+    setFriends(response.data);
+    console.log(response.data)
+  };
 
   useEffect(() => {
-    setFriendsCoordinates(dest);
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUserId(user.uid);
+      }
+    });
+  }, []);
+
+
+  useEffect(() => {
+    if (userId) {
+      getFriends(userId);
+    }
+  }, [userId]);
+
+
+  useEffect(() => {
     (async () => {
       try {
         const { status } = await Location.requestForegroundPermissionsAsync();
@@ -74,7 +70,26 @@ const MapComp = () => {
               latitude: location.coords.latitude,
               longitude: location.coords.longitude,
             });
-            
+  
+            // Only make API call if the location has changed
+            if (
+              !prevLocation ||
+              prevLocation.latitude !== location.coords.latitude ||
+              prevLocation.longitude !== location.coords.longitude
+            ) {
+              axios
+                .post(
+                  `https://geoapi.azurewebsites.net/user/location?id=${userId}&lat=${location.coords.latitude}&long=${location.coords.longitude}`
+                )
+                .then(() => {
+                  console.log("Location updated");
+                });
+  
+              setPrevLocation({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+              });
+            }
           }
         );
         setWatchId(newWatchId);
@@ -82,14 +97,14 @@ const MapComp = () => {
         setError(error);
       }
     })();
-    console.log(friendsCoordinates);
+    console.log("location", location);
   }, []);
 
   const handleMarkerPress = (coordinate) => {
     if (coordinate !== origin) {
       setDestination({
-        latitude: coordinate.latitude,
-        longitude: coordinate.longitude,
+        latitude: coordinate.lat,
+        longitude: coordinate.long,
       });
       setRouteVisible(!routeVisible);
     }
@@ -125,12 +140,15 @@ const MapComp = () => {
           />
         )}
         <Marker coordinate={origin} title="Current Location" />
-        {friendsCoordinates?.map((coordinate, index) => (
+        {friends?.map((friend) => (
           <Marker
-            key={index}
-            coordinate={coordinate}
-            title="Fictive Location"
-            onPress={() => handleMarkerPress(coordinate)}
+            key={friend.id}
+            coordinate={{
+              latitude: friend.latitude?friend.latitude:0,
+              longitude: friend.longitude?friend.longitude:0,
+            }}
+            onPress={() => handleMarkerPress({lat:friend.latitude,long:friend.longitude})}
+            title={friend.username}
           />
         ))}
       </MapView>
