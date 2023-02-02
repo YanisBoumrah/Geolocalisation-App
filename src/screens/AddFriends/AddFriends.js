@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Dimensions, FlatList, Image, SafeAreaView, Touc
 import axios from 'axios';
 import { auth } from '../../../firebase';
 import icon from '../../../assets/images/add_freind.png';
+import icon2 from '../../../assets/images/valide_icon.png';
 
 
 
@@ -48,6 +49,18 @@ const AddFriends = () => {
     }
   }
 
+  const addFriend = async (addid) =>{
+    await axios.post(`https://geoapi.azurewebsites.net/user/addfriend?currid=${userId}&addid=${addid}`)
+                .then(res =>{
+                  getFreinds();
+                  getNonFreind();
+                })
+                .catch(error => {
+                  console.error(error);
+                });
+  };
+
+
   const listTab = [
     {
       id: 1,
@@ -63,14 +76,41 @@ const AddFriends = () => {
    setField(field);
   };
 
-  const renderItem = ({item}) =>{
+  const renderFriends = ({item}) =>{
     return(
       <View key={item.id} style={styles.itemContainer}>
         <View style={styles.itemLogo}>
+            <Image
+              style={styles.itemImage}
+              source={icon2}
+            />
+        </View>
+        <View style={styles.itemBody}>
+          <View style={styles.itemBodyUp}>
+            <Text style={[styles.itemName, styles.itemNameEx]}>{item.username}</Text>
+          </View>
+          <View style={styles.itemBodyDown}>
+            <Text style={styles.itemName}>{item.firstName}</Text>
+            <Text style={styles.itemName}>{item.lastName}</Text>
+          </View>
+        </View>
+      </View>
+    )
+  };
+
+  const renderNonFriends = ({item}) =>{
+    return(
+      <View key={item.id} style={styles.itemContainer}>
+        <View style={styles.itemLogo}>
+        <TouchableOpacity
+          style={styles.touchableIcon}
+          onPress={()=> addFriend(item.id)}
+        >
           <Image
             style={styles.itemImage}
             source={icon}
           />
+        </TouchableOpacity>
         </View>
         <View style={styles.itemBody}>
           <View style={styles.itemBodyUp}>
@@ -109,13 +149,13 @@ const AddFriends = () => {
           <FlatList
             data={freinds?freinds:""}
             keyExtractor={(e,i) => i.toString()}
-            renderItem={renderItem}
+            renderItem={renderFriends}
           />
         :
         <FlatList
             data={nonFreinds?nonFreinds:""}
             keyExtractor={(e,i) => i.toString()}
-            renderItem={renderItem}
+            renderItem={renderNonFriends}
           />
       }
       
@@ -239,5 +279,5 @@ const styles = StyleSheet.create({
   bodyContainer:{
     flex:1,
     marginBottom :20
-  } 
+  },
 })
