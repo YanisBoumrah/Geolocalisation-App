@@ -47,16 +47,11 @@ const SignUpScreen = () => {
           lastName: lastName,
           username: username,
           email: email,
-          freinds: []
-        };
-        const bodyLocation = {
-          id: user.uid,
-          lat: location?.coords.latitude,
-          long: location?.coords.longitude
+          freinds: [],
+          latitude: null,
+          longitude: null
         };
         pushData(bodyUser);
-        pushLocation(bodyLocation);
-        console.log("body location", bodyLocation)
       })
     }else{
       Alert.alert("Error SignUp", "verify your fields");
@@ -70,10 +65,6 @@ const SignUpScreen = () => {
     console.log(response);        
   }
 
-  const pushLocation = async (body) => {
-    const response = await axios.post("https://geoapi.azurewebsites.net/location", body);
-    console.log(response);
-  }
 
   const verifyFields = () =>{
     if(firstName.length < 5 || lastName.length < 5 || username < 5){

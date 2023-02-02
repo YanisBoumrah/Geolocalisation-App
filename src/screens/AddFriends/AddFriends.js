@@ -12,24 +12,38 @@ const AddFriends = () => {
   const [field, setField] = useState('Freinds');
   const [data, setData] = useState([]);
   const [userId, setUserId] = useState("");
-  const [freids, setFreinds] = useState([]);
+  const [freinds, setFreinds] = useState([]);
+  const [nonFreinds, setNonFreinds] = useState([]);
 
   useEffect(() =>{
       auth.onAuthStateChanged(user =>{
         if(user){
           setUserId(user.uid);
         }
-        getData();
+        console.log(userId);
+        getFreinds();
+        console.log("freinds : ", freinds);
+        getNonFreind();
+        console.log("Non freinds : ", nonFreinds);
       });
 
 
   },[userId]);
 
-  const getData = async () => {
-    try {
-      const response = await axios.get(`https://geoapi.azurewebsites.net/user/filter?id=${userId}`);
-      setData(response.data);
-    } catch (error) {
+  const getFreinds = async () =>{
+    try{
+      const response = await axios.get(`https://geoapi.azurewebsites.net/user/friends?id=${userId}`);
+      setFreinds(response.data);
+    }catch(error){
+      console.error(error);
+    }
+  }
+
+  const getNonFreind = async () =>{
+    try{
+      const response = await axios.get(`https://geoapi.azurewebsites.net/user/nofreind?id=${userId}`);
+      setNonFreinds(response.data);
+    }catch(error){
       console.error(error);
     }
   }
@@ -89,11 +103,22 @@ const AddFriends = () => {
         ))
        }
       </View>
-      <FlatList
-        data={data?data:""}
-        keyExtractor={(e,i) => i.toString()}
-        renderItem={renderItem}
-      />
+      {
+        field == "Freinds" 
+        ?
+          <FlatList
+            data={freinds?freinds:""}
+            keyExtractor={(e,i) => i.toString()}
+            renderItem={renderItem}
+          />
+        :
+        <FlatList
+            data={nonFreinds?nonFreinds:""}
+            keyExtractor={(e,i) => i.toString()}
+            renderItem={renderItem}
+          />
+      }
+      
       {/* <View style={styles.bodyContainer}>
         {
           data == undefined
