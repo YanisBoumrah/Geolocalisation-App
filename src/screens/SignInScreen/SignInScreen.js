@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,23 +7,61 @@ import {
   useWindowDimensions,
   ScrollView,
 } from 'react-native';
-import Logo from '../../../assets/images/Logo_1.png';
+import Logo from '../../../assets/images/logo.png';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons';
 import {useNavigation} from '@react-navigation/native';
+import {auth} from '../../../firebase';
+// import * as Facebook from 'expo-facebook';
+import * as Location from 'expo-location';
+import axios from 'axios';
 
 const SignInScreen = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [location, setLocation] = useState({});
+  const [userId, setUserId] = useState("");
+
 
   const {height} = useWindowDimensions();
   const navigation = useNavigation();
 
-  const onSignInPressed = () => {
-    // validate user
-    navigation.navigate('Home');
-  };
+  useEffect(() => {
+    auth.onAuthStateChanged(user => {
+      if(user){
+          setUserId(user.uid);
+          navigation.replace("Home");
+      }
+  })
+  getLocation();
+  console.log(location);
+
+  },[])
+
+  const getLocation = async () =>{
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied');
+        return;
+      }
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High,
+      });
+      setLocation(location);
+    } catch (error) {
+      console.log(error);
+  }
+}
+  const handleLogin = () =>{
+    auth.signInWithEmailAndPassword(email, password)
+        .then(userCredntials =>{
+            const user = userCredntials.user;
+            console.log(`Logged in with ${user.email}`);
+        })
+        .catch(err => alert(err.message));
+  }
 
   const onForgotPasswordPressed = () => {
     navigation.navigate('ForgotPassword');
@@ -41,11 +79,11 @@ const SignInScreen = () => {
           style={[styles.logo, {height: height * 0.3}]}
           resizeMode="contain"
         />
-
+        <Text style={styles.title}>GEOTRACK</Text>
         <CustomInput
-          placeholder="Username"
-          value={username}
-          setValue={setUsername}
+          placeholder="email"
+          value={email}
+          setValue={setEmail}
         />
         <CustomInput
           placeholder="Password"
@@ -54,7 +92,7 @@ const SignInScreen = () => {
           secureTextEntry
         />
 
-        <CustomButton text="Sign In" onPress={onSignInPressed} />
+        <CustomButton text="Login" onPress={handleLogin} />
 
         <CustomButton
           text="Forgot password?"
@@ -62,7 +100,28 @@ const SignInScreen = () => {
           type="TERTIARY"
         />
 
-        <SocialSignInButtons />
+        <CustomButton
+        text="Sign In with Facebook"
+        // onPress={handleFacebookLogin}
+        bgColor="#E7EAF4"
+        fgColor="#4765A9"
+        image = {require('../../../assets/images/facebook.png')}
+      />
+      <CustomButton
+        text="Sign In with Google"
+        // onPress={onSignInGoogle}
+        bgColor="#FAE9EA"
+        fgColor="#DD4D44"
+        image = {require('../../../assets/images/google.png')}
+      />
+      <CustomButton
+        text="Sign In with Apple"
+        // onPress={onSignInApple}
+        bgColor="#e3e3e3"
+        fgColor="#363636"
+        image = {require('../../../assets/images/apple.png')}
+
+      />
 
         <CustomButton
           text="Don't have an account? Create one"
@@ -84,6 +143,10 @@ const styles = StyleSheet.create({
     maxWidth: 300,
     maxHeight: 200,
   },
+  title: {
+    fontWeight: 'bold',
+    fontSize:30,
+  }
 });
 
 export default SignInScreen;
